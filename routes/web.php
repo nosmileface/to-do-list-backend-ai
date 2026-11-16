@@ -1,40 +1,55 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Task;
+use App\Http\Controllers;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::prefix('tasks')->name('tasks.')->group(function() {
-
+Route::prefix('login')->name('login.')->group(function() {
     Route::get('/', [
-        Task\TaskController::class, 'index'
-    ])->name('index');
-
-    Route::get('{task}', [
-        Task\TaskController::class, 'show'
+        Controllers\Auth\AuthController::class, 'show'
     ])->name('show');
 
-    Route::get('create', [
-        Task\TaskController::class, 'create'
-    ])->name('create');
+    Route::post('login', [
+        Controllers\Auth\AuthController::class, 'login'
+    ])->name('login');
+});
 
-    Route::post('store', [
-        Task\TaskController::class, 'store'
-    ])->name('store');
+Route::middleware('auth')->group(function() {
 
-    Route::get('{task}/edit', [
-        Task\TaskController::class, 'edit'
-    ])->name('edit');
+    // Tasks
+    Route::prefix('tasks')->name('tasks.')->group(function() {
 
-    Route::put('{task}', [
-        Task\TaskController::class, 'update'
-    ])->name('update');
+        Route::get('/', [
+            Controllers\Task\TaskController::class, 'index'
+        ])->name('index');
 
-    Route::delete('{task}', [
-        Task\TaskController::class, ''
-    ])->name('destroy');
+        Route::get('{task}', [
+            Controllers\Task\TaskController::class, 'show'
+        ])->name('show');
+
+        Route::get('create', [
+            Controllers\Task\TaskController::class, 'create'
+        ])->name('create');
+
+        Route::post('store', [
+            Controllers\Task\TaskController::class, 'store'
+        ])->name('store');
+
+        Route::get('{task}/edit', [
+            Controllers\Task\TaskController::class, 'edit'
+        ])->name('edit');
+
+        Route::put('{task}', [
+            Controllers\Task\TaskController::class, 'update'
+        ])->name('update');
+
+        Route::delete('{task}', [
+            Controllers\Task\TaskController::class, ''
+        ])->name('destroy');
+
+    });
+
+    Route::post('logout', [
+        Controllers\Auth\AuthController::class, 'logout'
+    ])->name('logout');
 
 });
