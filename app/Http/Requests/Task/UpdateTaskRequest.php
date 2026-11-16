@@ -12,7 +12,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,20 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string']
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'Укажите название задачи.',
+            'title.string' => 'Название задачи должно быть строкой.',
+            'title.max' => 'Название задачи не должно превышать 255 символов.',
+
+            'description.required' => 'Укажите описание задачи.',
+            'description.string' => 'Описание задачи должно быть строкой.'
         ];
     }
 }

@@ -43,4 +43,34 @@ class TaskRepository
     {
         return $this->todo->query()->where('user_id', $userId)->findOrFail($id)->delete();
     }
+
+    public function toggleActive(int $userId, int $id): bool
+    {
+        $task = $this->todo->query()->where('user_id', $userId)->findOrFail($id);
+
+        return $task->update(['is_completed' => !$task->is_completed]);
+    }
+
+    public function count(int $userId): int
+    {
+        return $this->todo->query()
+            ->where('user_id', $userId)
+            ->count();
+    }
+
+    public function countActive(int $userId): int
+    {
+        return $this->todo->query()
+            ->where('user_id', $userId)
+            ->where('is_completed', true)
+            ->count();
+    }
+
+    public function countNotActive(int $userId): int
+    {
+        return $this->todo->query()
+            ->where('user_id', $userId)
+            ->where('is_completed', false)
+            ->count();
+    }
 }
