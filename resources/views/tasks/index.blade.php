@@ -27,14 +27,14 @@
         <div class="card p-5">
             <p class="text-sm text-slate-500">В работе</p>
             <p class="mt-2 text-3xl font-extrabold text-brand">
-                {{ $tasksCountNotActive }}
+                {{ $tasksCountCompleted }}
             </p>
         </div>
 
         <div class="card p-5">
             <p class="text-sm text-slate-500">Выполнено</p>
             <p class="mt-2 text-3xl font-extrabold text-emerald-600">
-                {{ $tasksCountActive }}
+                {{ $tasksCountPending }}
             </p>
         </div>
     </div>
@@ -72,11 +72,54 @@
                                 {{ $task->description ?: 'Без описания' }}
                             </p>
 
-                            <p class="mt-2 text-xs text-slate-400">
-                                Создано {{ $task->created_at?->format('d.m.Y') }}
-                            </p>
 
-                            @if($task->is_completed)
+                            <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+
+                                <div class="flex items-center gap-1.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="15"
+                                         height="15"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.8"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <path d="M20 21a8 8 0 0 0-16 0"/>
+                                        <circle cx="12" cy="8" r="4"/>
+                                    </svg>
+
+                                    <span>
+                                    Автор:
+                                        <span class="font-semibold text-slate-600">
+                                            {{ $task->user?->name ?? 'Неизвестный пользователь' }}
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <div class="flex items-center gap-1.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="15"
+                                         height="15"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.8"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <rect x="3" y="5" width="18" height="16" rx="2"/>
+                                        <path d="M16 3v4M8 3v4M3 10h18"/>
+                                    </svg>
+
+                                    <span>
+                                        Создано {{ $task->created_at?->format('d.m.Y H:i:s') }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                        @if($task->is_completed)
                                 <span class="mt-2 inline-block rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
                                     ✓ Выполнена
                                 </span>

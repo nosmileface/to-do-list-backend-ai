@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Task\TaskController;
 
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('tasks.index')
+        : redirect()->route('login.show');
+})->name('home');
+
 Route::middleware('guest')->prefix('login')->name('login.')->group(function () {
 
     Route::get('/', [
@@ -13,6 +19,7 @@ Route::middleware('guest')->prefix('login')->name('login.')->group(function () {
     Route::post('/', [
         AuthController::class, 'login'
     ])->name('login');
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -56,4 +63,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [
         AuthController::class, 'logout'
     ])->name('logout');
+
 });

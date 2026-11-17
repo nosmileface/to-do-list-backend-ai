@@ -29,15 +29,47 @@
 @endauth
 
 <main class="mx-auto max-w-6xl px-5 py-10 sm:py-14">
+
     @if(session('success'))
-        <div role="status" class="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-medium text-emerald-800"><span>✓</span>{{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div role="alert" class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-800">
-            <p class="font-bold">Проверьте введённые данные</p>
-            <ul class="mt-2 list-inside list-disc space-y-1">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+        <div
+            id="success-alert"
+            role="status"
+            class="relative mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 pr-12 text-emerald-700"
+        >
+            <div class="flex items-center gap-3">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="shrink-0"
+                >
+                    <path d="M20 6 9 17l-5-5"/>
+                </svg>
+
+                <p class="text-sm font-medium">
+                    {{ session('success') }}
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="this.closest('[role=status]').remove()"
+                class="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-emerald-500 transition hover:bg-emerald-100 hover:text-emerald-700"
+                aria-label="Закрыть уведомление"
+                title="Закрыть"
+            >
+                ✕
+            </button>
         </div>
     @endif
+
+
     @yield('content')
 </main>
 </body>

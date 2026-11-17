@@ -19,7 +19,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8']
+            'password' => ['required', 'string']
         ];
     }
 
@@ -32,8 +32,7 @@ class LoginRequest extends FormRequest
             'email.max' => 'Электронная почта не должна превышать 255 символов.',
 
             'password.required' => 'Поле пароля обязательно для заполнения.',
-            'password.string' => 'Пароль должен быть строкой.',
-            'password.min' => 'Пароль должен содержать минимум 8 символов.'
+            'password.string' => 'Пароль должен быть строкой.'
         ];
     }
 }

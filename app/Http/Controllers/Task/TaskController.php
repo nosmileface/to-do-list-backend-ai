@@ -18,17 +18,11 @@ class TaskController extends Controller
     {
         $tasks = $this->taskRepository->all(userId: auth()->user()->id);
 
-        $tasksCount = $this->count();
-
-        $tasksCountActive = $this->active();
-
-        $tasksCountNotActive = $this->notActive();
-
         return view('tasks.index', [
             'tasks' => $tasks,
-            'tasksCount' => $tasksCount,
-            'tasksCountActive' => $tasksCountActive,
-            'tasksCountNotActive' => $tasksCountNotActive
+            'tasksCount' => $this->count(),
+            'tasksCountCompleted' => $this->countActive(),
+            'tasksCountPending' => $this->countCompleted()
         ]);
     }
 
@@ -117,12 +111,12 @@ class TaskController extends Controller
         return $this->taskRepository->count(userId: auth()->user()->id);
     }
 
-    private function active(): int
+    private function countActive(): int
     {
         return $this->taskRepository->countActive(userId: auth()->user()->id);
     }
 
-    private function notActive(): int
+    private function countCompleted(): int
     {
         return $this->taskRepository->countNotActive(userId: auth()->user()->id);
     }

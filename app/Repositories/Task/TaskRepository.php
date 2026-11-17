@@ -8,13 +8,18 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository
 {
+    private const string RELATIONS = 'user';
+
     public function __construct(private Task $todo){}
 
     public function all(int $userId): LengthAwarePaginator
     {
         return $this->todo->query()
+            ->with([self::RELATIONS])
             ->where('user_id', $userId)
-            ->orderBy(Query::COLUMN_ID, Query::SORT_DESCt)
+            ->orderBy(Query::COLUMN_IS_COMPLETED, Query::SORT_ASC)
+            ->orderByDesc(Query::COLUMN_CREATED_AT)
+            ->orderByDesc(Query::COLUMN_ID)
             ->paginate(Query::PER_PAGE);
     }
 
@@ -27,7 +32,9 @@ class TaskRepository
     {
         $data['user_id'] = $userId;
 
-        return $this->todo->query()->create($data);
+        $task = $this->todo->query()->create($data);
+
+        return $task->load([self::RELATIONS]);
     }
 
     public function update(int $userId, int $id, array $data): Task
@@ -36,7 +43,7 @@ class TaskRepository
 
         $todo->update($data);
 
-        return $todo;
+        return $todo->load([self::RELATIONS]);
     }
 
     public function delete(int $userId, int $id): bool
@@ -46,9 +53,12 @@ class TaskRepository
 
     public function toggleActive(int $userId, int $id): bool
     {
-        $task = $this->todo->query()->where('user_id', $userId)->findOrFail($id);
+        $task = $this->todo->query()
+            ->where('user_id', $userId)
+            ->where('is_completed', false)
+            ->findOrFail($id);
 
-        return $task->update(['is_completed' => !$task->is_completed]);
+        return $task->update(['is_completed' => true]);
     }
 
     public function count(int $userId): int
